@@ -169,7 +169,7 @@ def main():
         new_row = pd.DataFrame({'id': [flow_data.iloc[current_index, 0]-1], 'label': [label]})
         df_labels = pd.concat([df_labels, new_row], ignore_index=True)
         df_labels.to_csv(labels_file, index=False)
-        conn.update(data=df_labels)
+        conn.update(spreadsheet=spreadsheet, worksheet=0, data=df_labels)
         next_data(current_index, flow_data)  
     
     def submit():
