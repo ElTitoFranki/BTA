@@ -118,7 +118,7 @@ def main():
         fig.add_vrect(x0=central_region_start, x1=central_region_end, 
                     fillcolor='lightgreen', opacity=0.3, layer='below', line_width=0,row=2,col=1)
         #fig.update_layout(height=520, width=630, showlegend=False, title=f"Breath index: {current_index}")
-        fig.update_layout(showlegend=False, title=f"Breath index: {current_index}")
+        fig.update_layout(height=500, use_container_width=True, showlegend=False, title=f"Breath index: {current_index}")
         fig.update_yaxes(title_text='Flow [L/min]', row=1, col=1)
         fig.update_yaxes(title_text='Paw [cmH2O]', row=2, col=1)
         fig.update_xaxes(title_text='Time [s]', row=2, col=1)
