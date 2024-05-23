@@ -211,11 +211,11 @@ def main():
         st.session_state.my_text = ""  
     st.sidebar.text_input(f":gray[Otherwise, write the breath index to display (integer between 0 and {len(flow_data)-1}):]", key="widget", on_change=submit)
 
-    # # Uncomment the following lines to add a "Donwload data" button:
-    # st.sidebar.markdown("___")
-    # if os.path.exists(labels_file):
-    #     st.sidebar.caption(":gray[Press the button below to download the tagged breaths (as a `.csv` file):]")
-    #     st.sidebar.download_button(label="Download tagged breaths",data=pd.read_csv(labels_file).to_csv(index=False),file_name="labels.csv",mime='text/csv') 
+    # Uncomment the following lines to add a "Donwload data" button:
+    st.sidebar.markdown("___")
+    if os.path.exists(labels_file):
+        st.sidebar.caption(":gray[Press the button below to download the tagged breaths (as a `.csv` file):]")
+        st.sidebar.download_button(label="Download tagged breaths",data=pd.read_csv(labels_file).to_csv(index=False),file_name="labels.csv",mime='text/csv') 
 
 
     # Plot
