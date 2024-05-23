@@ -219,7 +219,7 @@ def main():
     st.sidebar.markdown("___")
     if os.path.exists(labels_file):
         st.sidebar.caption(":gray[Press the button below to download the tagged breaths (as a `.csv` file):]")
-        st.sidebar.download_button(label="Download tagged breaths",data=pd.read_csv(labels_file).to_csv(index=False),file_name="labels.csv",mime='text/csv') 
+        st.sidebar.download_button(label="Download tagged breaths",data=pd.read_csv(labels_file).to_csv(index=False),file_name=labels_file,mime='text/csv') 
 
 
     # Plot
