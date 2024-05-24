@@ -134,7 +134,7 @@ def main():
         xticks_short = [(x-60)/20 for x in list(range(0,180,10))]
         fig.update_xaxes(tickvals=[10*x for x in list(range(len(xticks_short)))],ticktext=xticks_short, row=2, col=1)
         #st.plotly_chart(fig, config={'displayModeBar': False})
-        st.plotly_chart(fig, config={'staticPlot': True})
+        st.plotly_chart(fig, config={'displaylogo': False, 'displayModeBar': False})
 
 
     # # Uncomment the following lines (plot_data definition) if esofagic pressure (Peso) is available.
