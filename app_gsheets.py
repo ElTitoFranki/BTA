@@ -127,14 +127,16 @@ def main():
                     annotation_text='Breath to tag', annotation_position='top',row=1,col=1)
         fig.add_vrect(x0=central_region_start, x1=central_region_end, 
                     fillcolor='lightgreen', opacity=0.3, layer='below', line_width=0,row=2,col=1)
-        fig.update_layout(height=500, autosize=True, showlegend=False, title=f"Breath index: {current_index}")
+        #fig.update_layout(height=500, autosize=True, showlegend=False, title=f"Breath index: {current_index}")
+        fig.update_layout(autosize=True, showlegend=False, title=f"Breath index: {current_index}")
         fig.update_yaxes(title_text='Flow [L/min]', row=1, col=1)
         fig.update_yaxes(title_text='Paw [cmH2O]', row=2, col=1)
         fig.update_xaxes(title_text='Time [s]', row=2, col=1)
         xticks_short = [(x-60)/20 for x in list(range(0,180,10))]
         fig.update_xaxes(tickvals=[10*x for x in list(range(len(xticks_short)))],ticktext=xticks_short, row=2, col=1)
         #st.plotly_chart(fig, config={'displayModeBar': False})
-        st.plotly_chart(fig, config={'displaylogo': False, 'displayModeBar': False})
+        #st.plotly_chart(fig, config={'displaylogo': False, 'displayModeBar': False})
+        st.plotly_chart(fig, config={'staticPlot': True})
 
 
     # # Uncomment the following lines (plot_data definition) if esofagic pressure (Peso) is available.
