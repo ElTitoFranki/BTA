@@ -11,18 +11,6 @@ from plotly.subplots import make_subplots
 # from email import encoders
 
 
-# Create a connection object.
-#conn = st.connection("gsheets", type=GSheetsConnection)
-
-# Set paths
-basedir = os.getcwd()
-static_files_folder = os.path.join(basedir,"static")
-flow_data = pd.read_csv(os.path.join(basedir, 'data/Flow.csv'))
-paw_data = pd.read_csv(os.path.join(basedir, 'data/Paw.csv'))
-last_index_file = os.path.join(basedir, f'{st.session_state["username"]}_last_index.txt')
-labels_file = os.path.join(basedir, f'{st.session_state["username"]}_labels.csv')
-
-
 # To deploy, make sure to copy `app.py`, `data` folder, `~.streamlit/sectrets.toml`, and install `requirements.txt`
 
 
@@ -67,6 +55,20 @@ if check_password():
     st.session_state["username"]=check_password()
 else:
     st.stop()
+
+
+
+# Create a connection object.
+#conn = st.connection("gsheets", type=GSheetsConnection)
+
+# Set paths
+basedir = os.getcwd()
+static_files_folder = os.path.join(basedir,"static")
+flow_data = pd.read_csv(os.path.join(basedir, 'data/Flow.csv'))
+paw_data = pd.read_csv(os.path.join(basedir, 'data/Paw.csv'))
+last_index_file = os.path.join(static_files_folder, f'{st.session_state["username"]}_last_index.txt')
+labels_file = os.path.join(static_files_folder, f'{st.session_state["username"]}_labels.csv')
+
 
 
 # Esto es necesario para que los botones de labels tengan anchura flexible:
