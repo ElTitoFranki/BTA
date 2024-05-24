@@ -20,8 +20,7 @@ static_files_folder = os.path.join(basedir,"static")
 flow_data = pd.read_csv(os.path.join(basedir, 'data/Flow.csv'))
 paw_data = pd.read_csv(os.path.join(basedir, 'data/Paw.csv'))
 last_index_file = os.path.join(basedir, f'{st.session_state["username"]}_last_index.txt')
-labels_file = os.path.join(static_files_folder, f'{st.session_state["username"]}_labels.csv')
-
+labels_file = os.path.join(basedir, f'{st.session_state["username"]}_labels.csv')
 
 
 # To deploy, make sure to copy `app.py`, `data` folder, `~.streamlit/sectrets.toml`, and install `requirements.txt`
