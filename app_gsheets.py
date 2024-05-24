@@ -3,11 +3,17 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+#from streamlit_gsheets import GSheetsConnection
 
-from streamlit_gsheets import GSheetsConnection
+# import smtplib
+# from email.mime.multipart import MIMEMultipart
+# from email.mime.base import MIMEBase
+# from email import encoders
 
-# Create a connection object.
-conn = st.connection("gsheets", type=GSheetsConnection)
+
+
+
+
 
 # To deploy, make sure to copy `app.py`, `data` folder, `~.streamlit/sectrets.toml`, and install `requirements.txt`
 
@@ -55,14 +61,16 @@ else:
     st.stop()
 
 
-
+# Create a connection object.
+#conn = st.connection("gsheets", type=GSheetsConnection)
 
 # Set paths
 basedir = os.getcwd()
+static_files_folder = os.path.join(basedir,".static")
 flow_data = pd.read_csv(os.path.join(basedir, 'data/Flow.csv'))
 paw_data = pd.read_csv(os.path.join(basedir, 'data/Paw.csv'))
-last_index_file = os.path.join(basedir, f'{st.session_state["username"]}_last_index.txt')
-labels_file = os.path.join(basedir, f'{st.session_state["username"]}_labels.csv')
+last_index_file = os.path.join(static_files_folder, f'{st.session_state["username"]}_last_index.txt')
+labels_file = os.path.join(static_files_folder, f'{st.session_state["username"]}_labels.csv')
 
 # Esto es necesario para que los botones de labels tengan anchura flexible:
 st.markdown("""
@@ -120,7 +128,7 @@ def main():
                     annotation_text='Breath to tag', annotation_position='top',row=1,col=1)
         fig.add_vrect(x0=central_region_start, x1=central_region_end, 
                     fillcolor='lightgreen', opacity=0.3, layer='below', line_width=0,row=2,col=1)
-        fig.update_layout(height=520, width=630, showlegend=False, title=f"Breath index: {current_index}")
+        fig.update_layout(height=500, autosize=True, showlegend=False, title=f"Breath index: {current_index}")
         fig.update_yaxes(title_text='Flow [L/min]', row=1, col=1)
         fig.update_yaxes(title_text='Paw [cmH2O]', row=2, col=1)
         fig.update_xaxes(title_text='Time [s]', row=2, col=1)
@@ -169,7 +177,7 @@ def main():
         new_row = pd.DataFrame({'id': [flow_data.iloc[current_index, 0]-1], 'label': [label]})
         df_labels = pd.concat([df_labels, new_row], ignore_index=True)
         df_labels.to_csv(labels_file, index=False)
-        conn.update(worksheet=0, data=df_labels)
+        #conn.write(data=df_labels)
         next_data(current_index, flow_data)  
     
     def submit():
@@ -182,6 +190,32 @@ def main():
             save_last_index(current_index, last_index_file) 
         else:
              st.error("Not a valid input, please provide a valid index value.") 
+
+    # # Function to send email
+    # def send_email(subject, body, to_email, file_path):
+    #     from_email = "..."
+    #     from_password = "..."
+        
+    #     # Create the email
+    #     msg = MIMEMultipart()
+    #     msg['From'] = from_email
+    #     msg['To'] = to_email
+    #     msg['Subject'] = subject
+    #     msg.attach(MIMEText(body, 'plain'))
+        
+    #     # Attach the file
+    #     attachment = MIMEBase('application', 'octet-stream')
+    #     attachment.set_payload(open(file_path, 'rb').read())
+    #     encoders.encode_base64(attachment)
+    #     attachment.add_header('Content-Disposition', 'attachment', filename=os.path.basename(file_path))
+    #     msg.attach(attachment)
+        
+    #     # Send the email
+    #     server = smtplib.SMTP('smtp.example.com', 587)
+    #     server.starttls()
+    #     server.login(from_email, from_password)
+    #     server.sendmail(from_email, to_email, msg.as_string())
+    #     server.quit()
 
 
     # Initialize breath index
@@ -220,6 +254,11 @@ def main():
     if os.path.exists(labels_file):
         st.sidebar.caption(":gray[Press the button below to download the tagged breaths (as a `.csv` file):]")
         st.sidebar.download_button(label="Download tagged breaths",data=pd.read_csv(labels_file).to_csv(index=False),file_name=labels_file,mime='text/csv') 
+        # st.sidebar.button("Send labels via email", on_click=send_email(
+        #     "your labels file", 
+        #     "Find the attached labels file.", 
+        #     "...", 
+        #     labels_file))
 
 
     # Plot
