@@ -3,6 +3,9 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+
+# import streamlit_antd_components as sac
+
 #from streamlit_gsheets import GSheetsConnection
 
 # import smtplib
@@ -70,6 +73,9 @@ last_index_file = os.path.join(static_files_folder, f'{st.session_state["usernam
 labels_file = os.path.join(static_files_folder, f'{st.session_state["username"]}_labels.csv')
 
 
+#st.markdown(" <style> div[class^='css-1544g2n'] { padding-top: 0em; } </style> ", unsafe_allow_html=True)
+#st.markdown(" <style> div[class^='block-container'] { padding-top: 0px; } </style> ", unsafe_allow_html=True)
+
 
 # Esto es necesario para que los botones de labels tengan anchura flexible:
 st.markdown("""
@@ -135,8 +141,13 @@ def main():
         xticks_short = [(x-60)/20 for x in list(range(0,180,10))]
         fig.update_xaxes(tickvals=[10*x for x in list(range(len(xticks_short)))],ticktext=xticks_short, row=2, col=1)
         #st.plotly_chart(fig, config={'displayModeBar': False})
-        #st.plotly_chart(fig, config={'displaylogo': False, 'displayModeBar': False})
-        st.plotly_chart(fig, config={'staticPlot': True})
+        #st.plotly_chart(fig, config={'displaylogo': False})
+        #st.plotly_chart(fig, config={'staticPlot': True})
+        if st.checkbox("Enable interactive plot"):
+            st.plotly_chart(fig, config={'displaylogo': False})
+        else:
+            st.plotly_chart(fig, config={'staticPlot': True})
+            
 
 
     # # Uncomment the following lines (plot_data definition) if esofagic pressure (Peso) is available.
@@ -262,8 +273,13 @@ def main():
         #     labels_file))
 
 
-    # Plot
     plot_data(current_index, flow_data, paw_data)
+
+    
+    # button_text = "foo", "bar", "baz", "fodfthdo", "baftg err", "baerer z", "foererrgfero", "bar1", "baz2" 
+    # for text, col in zip(button_text, st.columns(len(button_text))):
+    #     if col.button(text):
+    #         col.write(f"{text} clicked")
     
 
     # Labels buttons
@@ -325,6 +341,8 @@ def main():
     colb7.button("RTinsp",on_click=buttonb7_pressed,key=f"buttonb7_{st.session_state.button_b7}")
     colb8.button("RTexp",on_click=buttonb8_pressed,key=f"buttonb8_{st.session_state.button_b8}")
     colb9.button("Others",on_click=buttonb9_pressed,key=f"buttonb9_{st.session_state.button_b9}")
+
+
 
 if __name__ == "__main__":
     main()
