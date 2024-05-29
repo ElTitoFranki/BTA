@@ -5,10 +5,11 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 
+
 # To deploy, make sure to copy `app.py`, `data` folder, `~.streamlit/sectrets.toml`, and install `requirements.txt`
 
 
-# # Uncomment the following line if user/passowrd login is activated:
+# # Comment the following line if user/passowrd login is activated!!!!
 # st.session_state["username"] = "user"
 
 # This is for user/password login (also need to copy the `~/.streamlit/secrets.toml` file!):
@@ -51,14 +52,14 @@ else:
     st.stop()
 
 
+
+
 # Set paths
 basedir = os.getcwd()
-static_files_folder = os.path.join(basedir,"static")
 flow_data = pd.read_csv(os.path.join(basedir, 'data/Flow.csv'))
 paw_data = pd.read_csv(os.path.join(basedir, 'data/Paw.csv'))
-last_index_file = os.path.join(static_files_folder, f'{st.session_state["username"]}_last_index.txt')
-labels_file = os.path.join(static_files_folder, f'{st.session_state["username"]}_labels.csv')
-
+last_index_file = os.path.join(basedir, f'{st.session_state["username"]}_last_index.txt')
+labels_file = os.path.join(basedir, f'{st.session_state["username"]}_labels.csv')
 
 # Esto es necesario para que los botones de labels tengan anchura flexible:
 st.markdown("""
@@ -116,20 +117,15 @@ def main():
                     annotation_text='Breath to tag', annotation_position='top',row=1,col=1)
         fig.add_vrect(x0=central_region_start, x1=central_region_end, 
                     fillcolor='lightgreen', opacity=0.3, layer='below', line_width=0,row=2,col=1)
-        fig.update_layout(autosize=True, showlegend=False, title=f"Breath index: {current_index}")
+        #fig.update_layout(height=520, width=630, showlegend=False, title=f"Breath index: {current_index}")
+        fig.update_layout(height=500, autosize=True, showlegend=False, title=f"Breath index: {current_index}")
         fig.update_yaxes(title_text='Flow [L/min]', row=1, col=1)
         fig.update_yaxes(title_text='Paw [cmH2O]', row=2, col=1)
         fig.update_xaxes(title_text='Time [s]', row=2, col=1)
         xticks_short = [(x-60)/20 for x in list(range(0,180,10))]
         fig.update_xaxes(tickvals=[10*x for x in list(range(len(xticks_short)))],ticktext=xticks_short, row=2, col=1)
         #st.plotly_chart(fig, config={'displayModeBar': False})
-        #st.plotly_chart(fig, config={'displaylogo': False})
-        #st.plotly_chart(fig, config={'staticPlot': True})
-        if st.checkbox("Enable interactive plot"):
-            st.plotly_chart(fig, config={'displaylogo': False})
-        else:
-            st.plotly_chart(fig, config={'staticPlot': True})
-            
+        st.plotly_chart(fig, config={'displaylogo': False})
 
 
     # # Uncomment the following lines (plot_data definition) if esofagic pressure (Peso) is available.
@@ -152,7 +148,7 @@ def main():
     #                 fillcolor='lightgreen', opacity=0.3, layer='below', line_width=0,row=2,col=1)
     #     fig.add_vrect(x0=central_region_start, x1=central_region_end, 
     #                 fillcolor='lightgreen', opacity=0.3, layer='below', line_width=0,row=3,col=1)
-    #     fig.update_layout(autosize=True, showlegend=False, title=f"Breath index: {current_index}")
+    #     fig.update_layout(height=570, width=630, showlegend=False, title=f"Breath index: {current_index}")
     #     fig.update_yaxes(title_text='Flow [L/min]', row=1, col=1)
     #     fig.update_yaxes(title_text='Paw [cmH2O]', row=2, col=1)
     #     fig.update_yaxes(title_text='Peso [cmH2O]', row=3, col=1)
@@ -162,9 +158,15 @@ def main():
     #     #st.plotly_chart(fig, config={'displayModeBar': False})
     #     st.plotly_chart(fig, config={'displaylogo': False})
 
-                 
-    def label_data(label,current_index,labels_file):
-        pd.DataFrame({'id': [current_index], 'label': [label]}).to_csv(labels_file, mode='a', index=False, header=False)
+          
+    def label_data(label,current_index,flow_data,labels_file):
+        df_labels = pd.DataFrame(columns=['id', 'label'])
+        if os.path.exists(labels_file):
+            df_labels = pd.read_csv(labels_file)
+        df_labels = df_labels[df_labels['id'] != flow_data.iloc[current_index, 0]]
+        new_row = pd.DataFrame({'id': [flow_data.iloc[current_index, 0]-1], 'label': [label]})
+        df_labels = pd.concat([df_labels, new_row], ignore_index=True)
+        df_labels.to_csv(labels_file, index=False)
         next_data(current_index, flow_data)  
     
     def submit():
@@ -217,7 +219,9 @@ def main():
         st.sidebar.download_button(label="Download tagged breaths",data=pd.read_csv(labels_file).to_csv(index=False),file_name=labels_file,mime='text/csv') 
 
 
-    plot_data(current_index, flow_data, paw_data)  
+    # Plot
+    plot_data(current_index, flow_data, paw_data)
+    
 
     # Labels buttons
     colb1, colb2, colb3, colb4, colb5, colb6, colb7, colb8, colb9 = st.columns([1,1,1,1,1,1,1,1,1])
@@ -240,34 +244,34 @@ def main():
         st.session_state.button_b8 = 1
     if "button_b9" not in st.session_state:
         st.session_state.button_b9 = 1
-     
+    
     def buttonb1_pressed():
         st.session_state.button_b1 += 1
-        label_data("Normal",current_index,labels_file)
+        label_data("Normal",current_index,flow_data,labels_file)
     def buttonb2_pressed():
         st.session_state.button_b2 += 1
-        label_data("DT",current_index,labels_file)
+        label_data("DT",current_index,flow_data,labels_file)
     def buttonb3_pressed():
         st.session_state.button_b3 += 1
-        label_data("IE",current_index,labels_file)
+        label_data("IE",current_index,flow_data,labels_file)
     def buttonb4_pressed():
         st.session_state.button_b4 += 1
-        label_data("SC",current_index,labels_file)
+        label_data("SC",current_index,flow_data,labels_file)
     def buttonb5_pressed():
         st.session_state.button_b5 += 1
-        label_data("PC",current_index,labels_file)
+        label_data("PC",current_index,flow_data,labels_file)
     def buttonb6_pressed():
         st.session_state.button_b6 += 1
-        label_data("RT-DT",current_index,labels_file)
+        label_data("RT-DT",current_index,flow_data,labels_file)
     def buttonb7_pressed():
         st.session_state.button_b7 += 1
-        label_data("RTinsp",current_index,labels_file)
+        label_data("RTinsp",current_index,flow_data,labels_file)
     def buttonb8_pressed():
         st.session_state.button_b8 += 1
-        label_data("RTexp",current_index,labels_file)
+        label_data("RTexp",current_index,flow_data,labels_file)
     def buttonb9_pressed():
         st.session_state.button_b9 += 1
-        label_data("Others",current_index,labels_file)
+        label_data("Others",current_index,flow_data,labels_file)
 
     colb1.button("Normal",on_click=buttonb1_pressed,key=f"buttonb1_{st.session_state.button_b1}")
     colb2.button("DT",on_click=buttonb2_pressed,key=f"buttonb2_{st.session_state.button_b2}")
@@ -278,7 +282,6 @@ def main():
     colb7.button("RTinsp",on_click=buttonb7_pressed,key=f"buttonb7_{st.session_state.button_b7}")
     colb8.button("RTexp",on_click=buttonb8_pressed,key=f"buttonb8_{st.session_state.button_b8}")
     colb9.button("Others",on_click=buttonb9_pressed,key=f"buttonb9_{st.session_state.button_b9}")
-
 
 if __name__ == "__main__":
     main()
