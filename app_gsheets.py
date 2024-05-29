@@ -339,7 +339,7 @@ def main():
     #     label_data("Others",current_index,flow_data,labels_file)
     
     
-        def buttonb1_pressed():
+    def buttonb1_pressed():
         st.session_state.button_b1 += 1
         label_data("Normal",current_index,labels_file)
     def buttonb2_pressed():
