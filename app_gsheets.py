@@ -180,17 +180,22 @@ def main():
     #     #st.plotly_chart(fig, config={'displayModeBar': False})
     #     st.plotly_chart(fig, config={'displaylogo': False})
 
-          
-    def label_data(label,current_index,flow_data,labels_file):
-        df_labels = pd.DataFrame(columns=['id', 'label'])
-        if os.path.exists(labels_file):
-            df_labels = pd.read_csv(labels_file)
-        # Uncomment the following line if only the last label should be saved:
-        df_labels = df_labels[df_labels['id'] != flow_data.iloc[current_index, 0]]
-        new_row = pd.DataFrame({'id': [flow_data.iloc[current_index, 0]], 'label': [label]})
-        df_labels = pd.concat([df_labels, new_row], ignore_index=True)
-        df_labels.to_csv(labels_file, index=False)
-        #conn.write(data=df_labels)
+
+
+    #  def label_data(label,current_index,flow_data,labels_file):
+    #     df_labels = pd.DataFrame(columns=['id', 'label'])
+    #     if os.path.exists(labels_file):
+    #         df_labels = pd.read_csv(labels_file)
+    #     # # Uncomment the following line if only the last label should be saved:
+    #     # df_labels = df_labels[df_labels['id'] != flow_data.iloc[current_index, 0]]
+    #     new_row = pd.DataFrame({'id': [flow_data.iloc[current_index, 0]], 'label': [label]})
+    #     df_labels = pd.concat([df_labels, new_row], ignore_index=True)
+    #     df_labels.to_csv(labels_file, index=False)
+    #     next_data(current_index, flow_data) 
+                 
+                 
+    def label_data(label,current_index,labels_file):
+        pd.DataFrame({'id': current_index, 'label': label}).to_csv(labels_file, mode='a', index=False, header=False)
         next_data(current_index, flow_data)  
     
     def submit():
@@ -305,33 +310,62 @@ def main():
     if "button_b9" not in st.session_state:
         st.session_state.button_b9 = 1
     
-    def buttonb1_pressed():
+    # def buttonb1_pressed():
+    #     st.session_state.button_b1 += 1
+    #     label_data("Normal",current_index,flow_data,labels_file)
+    # def buttonb2_pressed():
+    #     st.session_state.button_b2 += 1
+    #     label_data("DT",current_index,flow_data,labels_file)
+    # def buttonb3_pressed():
+    #     st.session_state.button_b3 += 1
+    #     label_data("IE",current_index,flow_data,labels_file)
+    # def buttonb4_pressed():
+    #     st.session_state.button_b4 += 1
+    #     label_data("SC",current_index,flow_data,labels_file)
+    # def buttonb5_pressed():
+    #     st.session_state.button_b5 += 1
+    #     label_data("PC",current_index,flow_data,labels_file)
+    # def buttonb6_pressed():
+    #     st.session_state.button_b6 += 1
+    #     label_data("RT-DT",current_index,flow_data,labels_file)
+    # def buttonb7_pressed():
+    #     st.session_state.button_b7 += 1
+    #     label_data("RTinsp",current_index,flow_data,labels_file)
+    # def buttonb8_pressed():
+    #     st.session_state.button_b8 += 1
+    #     label_data("RTexp",current_index,flow_data,labels_file)
+    # def buttonb9_pressed():
+    #     st.session_state.button_b9 += 1
+    #     label_data("Others",current_index,flow_data,labels_file)
+    
+    
+        def buttonb1_pressed():
         st.session_state.button_b1 += 1
-        label_data("Normal",current_index,flow_data,labels_file)
+        label_data("Normal",current_index,labels_file)
     def buttonb2_pressed():
         st.session_state.button_b2 += 1
-        label_data("DT",current_index,flow_data,labels_file)
+        label_data("DT",current_index,labels_file)
     def buttonb3_pressed():
         st.session_state.button_b3 += 1
-        label_data("IE",current_index,flow_data,labels_file)
+        label_data("IE",current_index,labels_file)
     def buttonb4_pressed():
         st.session_state.button_b4 += 1
-        label_data("SC",current_index,flow_data,labels_file)
+        label_data("SC",current_index,labels_file)
     def buttonb5_pressed():
         st.session_state.button_b5 += 1
-        label_data("PC",current_index,flow_data,labels_file)
+        label_data("PC",current_index,labels_file)
     def buttonb6_pressed():
         st.session_state.button_b6 += 1
-        label_data("RT-DT",current_index,flow_data,labels_file)
+        label_data("RT-DT",current_index,labels_file)
     def buttonb7_pressed():
         st.session_state.button_b7 += 1
-        label_data("RTinsp",current_index,flow_data,labels_file)
+        label_data("RTinsp",current_index,labels_file)
     def buttonb8_pressed():
         st.session_state.button_b8 += 1
-        label_data("RTexp",current_index,flow_data,labels_file)
+        label_data("RTexp",current_index,labels_file)
     def buttonb9_pressed():
         st.session_state.button_b9 += 1
-        label_data("Others",current_index,flow_data,labels_file)
+        label_data("Others",current_index,labels_file)
 
     colb1.button("Normal",on_click=buttonb1_pressed,key=f"buttonb1_{st.session_state.button_b1}")
     colb2.button("DT",on_click=buttonb2_pressed,key=f"buttonb2_{st.session_state.button_b2}")
