@@ -186,7 +186,7 @@ def main():
         if os.path.exists(labels_file):
             df_labels = pd.read_csv(labels_file)
         df_labels = df_labels[df_labels['id'] != flow_data.iloc[current_index, 0]]
-        new_row = pd.DataFrame({'id': [flow_data.iloc[current_index, 0]-1], 'label': [label]})
+        new_row = pd.DataFrame({'id': [flow_data.iloc[current_index, 0]], 'label': [label]})
         df_labels = pd.concat([df_labels, new_row], ignore_index=True)
         df_labels.to_csv(labels_file, index=False)
         #conn.write(data=df_labels)
