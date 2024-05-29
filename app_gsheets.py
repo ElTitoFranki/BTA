@@ -195,7 +195,7 @@ def main():
                  
                  
     def label_data(label,current_index,labels_file):
-        pd.DataFrame({'id': current_index, 'label': label}).to_csv(labels_file, mode='a', index=False, header=False)
+        pd.DataFrame({'id': [current_index], 'label': [label]}).to_csv(labels_file, mode='a', index=False, header=False)
         next_data(current_index, flow_data)  
     
     def submit():
