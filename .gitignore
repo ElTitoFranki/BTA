@@ -1,3 +1,5 @@
 .streamlit/secrets.toml
-static/*.csv
-static/*.txt
+data/Flowlong.csv
+data/Pawlong.csv
+data/Flow-old.csv
+data/Paw-old.csv
