@@ -258,7 +258,7 @@ def main():
         label_data("PC",current_index,labels_file)
     def buttonb6_pressed():
         st.session_state.button_b6 += 1
-        label_data("RT-DT",current_index,labels_file)
+        label_data("RT-DC",current_index,labels_file)
     def buttonb7_pressed():
         st.session_state.button_b7 += 1
         label_data("RTinsp",current_index,labels_file)
@@ -274,7 +274,7 @@ def main():
     colb3.button("IE",on_click=buttonb3_pressed,key=f"buttonb3_{st.session_state.button_b3}")
     colb4.button("SC",on_click=buttonb4_pressed,key=f"buttonb4_{st.session_state.button_b4}")
     colb5.button("PC",on_click=buttonb5_pressed,key=f"buttonb5_{st.session_state.button_b5}")
-    colb6.button("RT-DT",on_click=buttonb6_pressed,key=f"buttonb6_{st.session_state.button_b6}")
+    colb6.button("RT-DC",on_click=buttonb6_pressed,key=f"buttonb6_{st.session_state.button_b6}")
     colb7.button("RTinsp",on_click=buttonb7_pressed,key=f"buttonb7_{st.session_state.button_b7}")
     colb8.button("RTexp",on_click=buttonb8_pressed,key=f"buttonb8_{st.session_state.button_b8}")
     colb9.button("Others",on_click=buttonb9_pressed,key=f"buttonb9_{st.session_state.button_b9}")
